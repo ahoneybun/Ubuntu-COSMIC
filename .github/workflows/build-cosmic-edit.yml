@@ -12,6 +12,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y git build-essential devscripts fakeroot
+          sudo apt-get install -y debhelper-compat just libglib2.0-dev libxkbcommon-dev rust-all
 
       - name: Clone source repository
         run: |
