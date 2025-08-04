@@ -1,33 +1,38 @@
-name: cosmic-edit build
+name: Build cosmic-edit with just and package .deb
 
 on:
   workflow_dispatch:
 
 jobs:
-  build-deb:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest  # Ubuntu 24.04 if available, else specify explicitly
 
     steps:
-      - name: Install packaging tools
+      - name: Install system dependencies including just
         run: |
           sudo apt-get update
           sudo apt-get install -y git build-essential devscripts fakeroot
           sudo apt-get install -y debhelper-compat just libglib2.0-dev libxkbcommon-dev rust-all
 
-      - name: Clone source repository
+      - name: Clone cosmic-edit repo
         run: |
           git clone https://github.com/pop-os/cosmic-edit.git
           cd cosmic-edit
           git submodule update --init --recursive
 
-      - name: Build .deb package
+      - name: Build release binary with just
         working-directory: cosmic-edit
-        run: |
-          debuild -us -uc
+        run: just build-release
 
-      - name: Upload built .deb packages
+      - name: Prepare staging directory and install files
+        working-directory: cosmic-edit
+        run: just install rootdir=$(pwd)/pkg
+
+      - name: Build .deb package from staging directory
+        run: dpkg-deb --build cosmic-edit/pkg cosmic-edit.deb
+
+      - name: Upload .deb artifact
         uses: actions/upload-artifact@v4
         with:
-          name: cosmic-edit-debs
-          path: ../*.deb
-
+          name: cosmic-edit-deb
+          path: cosmic-edit.deb
