@@ -1,0 +1,32 @@
+name: cosmic-edit build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-deb:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install packaging tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git build-essential devscripts fakeroot
+
+      - name: Clone source repository
+        run: |
+          git clone https://github.com/pop-os/cosmic-edit.git
+          cd cosmic-edit
+          git submodule update --init --recursive
+
+      - name: Build .deb package
+        working-directory: cosmic-edit
+        run: |
+          debuild -us -uc
+
+      - name: Upload built .deb packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosmic-edit-debs
+          path: ../*.deb
+
