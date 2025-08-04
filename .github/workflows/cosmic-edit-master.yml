@@ -1,0 +1,25 @@
+name: Build cosmic-edit - master
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Ubuntu 24.04 if available, else specify explicitly
+
+    steps:
+      - name: Install system dependencies including just
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git build-essential devscripts fakeroot
+          sudo apt-get install -y debhelper-compat just libglib2.0-dev libxkbcommon-dev rust-all
+
+      - name: Clone cosmic-edit repo
+        run: |
+          git clone https://github.com/pop-os/cosmic-edit.git
+          cd cosmic-edit
+          git submodule update --init --recursive
+
+      - name: Build release binary with just
+        working-directory: cosmic-edit
+        run: just build-release

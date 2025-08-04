@@ -1,4 +1,4 @@
-name: Build cosmic-edit with just
+name: Build cosmic-edit - 1.0.0 alpha7
 
 on:
   workflow_dispatch:
@@ -18,6 +18,7 @@ jobs:
         run: |
           git clone https://github.com/pop-os/cosmic-edit.git
           cd cosmic-edit
+          git checkout epoch-1.0.0-alpha.7
           git submodule update --init --recursive
 
       - name: Build release binary with just
