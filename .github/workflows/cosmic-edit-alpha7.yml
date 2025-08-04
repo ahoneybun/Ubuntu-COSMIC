@@ -11,10 +11,8 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            git build-essential devscripts fakeroot debhelper just \
-            libglib2.0-dev libxkbcommon-dev libgtk-4-dev libadwaita-1-dev \
-            rust-all
+          sudo apt-get install -y git build-essential devscripts fakeroot
+          sudo apt-get install -y debhelper just libglib2.0-dev libxkbcommon-dev rust-all
 
       - name: Clone cosmic-edit
         run: |
@@ -23,23 +21,13 @@ jobs:
           git checkout epoch-1.0.0-alpha.7
           git submodule update --init --recursive
 
-      - name: Build binary
-        working-directory: cosmic-edit
-        run: just build-release
-
-      - name: Install into staging dir
-        working-directory: cosmic-edit
-        run: |
-          mkdir -p ../pkg
-          just install rootdir=$(realpath ../pkg)
-
       - name: Build .deb
         run: |
-          dpkg-deb --build pkg cosmic-edit_1.0.0-alpha7_amd64.deb
+          dpkg-buildpackage -us -uc
 
       - name: Upload .deb package
         uses: actions/upload-artifact@v4
         with:
           name: cosmic-edit-deb
-          path: cosmic-edit_1.0.0-alpha7_amd64.deb
-
+          path: |
+            cosmic-edit_*.deb
