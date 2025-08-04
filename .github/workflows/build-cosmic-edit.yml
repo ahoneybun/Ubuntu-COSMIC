@@ -1,4 +1,4 @@
-name: Build cosmic-edit with just and package .deb
+name: Build cosmic-edit with just
 
 on:
   workflow_dispatch:
@@ -23,16 +23,3 @@ jobs:
       - name: Build release binary with just
         working-directory: cosmic-edit
         run: just build-release
-
-      - name: Prepare staging directory and install files
-        working-directory: cosmic-edit
-        run: just install rootdir=$(pwd)/pkg
-
-      - name: Build .deb package from staging directory
-        run: dpkg-deb --build cosmic-edit/pkg cosmic-edit.deb
-
-      - name: Upload .deb artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: cosmic-edit-deb
-          path: cosmic-edit.deb
