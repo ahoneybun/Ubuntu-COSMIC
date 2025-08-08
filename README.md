@@ -13,6 +13,8 @@ GitHub Actions for building COSMIC packages for Ubuntu
 - [ ] cosmic-store
 - [ ] cosmic-player
 
+## COSMIC backend
+
 - [ ] cosmic-applets
 - [ ] cosmic-applibrary
 - [ ] cosmic-bg
