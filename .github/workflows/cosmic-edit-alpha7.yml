@@ -22,8 +22,8 @@ jobs:
           git submodule update --init --recursive
 
       - name: Build .deb
-        run: |
-          dpkg-buildpackage -us -uc
+        working-directory: cosmic-edit
+        run: dpkg-buildpackage -us -uc
 
       - name: Upload .deb package
         uses: actions/upload-artifact@v4
