@@ -1,0 +1,59 @@
+name: Build cosmic-store - master
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-amd64:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git build-essential devscripts fakeroot
+          sudo apt-get install -y debhelper just pkg-config libxkbcommon-dev rust-all libflatpak-dev libssl-dev
+
+      - name: Clone cosmic-store
+        run: |
+          git clone https://github.com/pop-os/cosmic-store.git
+          cd cosmic-store
+          git submodule update --init --recursive
+
+      - name: Build .deb
+        working-directory: cosmic-store
+        run: dpkg-buildpackage -us -uc
+
+      - name: Upload .deb package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosmic-store-master-amd64-deb
+          path: |
+            cosmic-store_*.deb
+
+  build-arm64:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git build-essential devscripts fakeroot
+          sudo apt-get install -y debhelper just pkg-config libxkbcommon-dev rust-all libflatpak-dev libssl-dev
+
+      - name: Clone cosmic-store
+        run: |
+          git clone https://github.com/pop-os/cosmic-store.git
+          cd cosmic-store
+          git submodule update --init --recursive
+
+      - name: Build .deb
+        working-directory: cosmic-store
+        run: dpkg-buildpackage -us -uc
+
+      - name: Upload .deb package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosmic-store-master-arm64-deb
+          path: |
+            cosmic-store_*.deb

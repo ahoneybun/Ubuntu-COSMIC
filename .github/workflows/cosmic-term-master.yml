@@ -1,0 +1,59 @@
+name: Build cosmic-term - master
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-amd64:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git build-essential devscripts fakeroot
+          sudo apt-get install -y debhelper just pkg-config libxkbcommon-dev rust-all
+
+      - name: Clone cosmic-term
+        run: |
+          git clone https://github.com/pop-os/cosmic-term.git
+          cd cosmic-term
+          git submodule update --init --recursive
+
+      - name: Build .deb
+        working-directory: cosmic-term
+        run: dpkg-buildpackage -us -uc
+
+      - name: Upload .deb package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosmic-term-master-amd64-deb
+          path: |
+            cosmic-term_*.deb
+
+  build-arm64:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git build-essential devscripts fakeroot
+          sudo apt-get install -y debhelper just pkg-config libxkbcommon-dev rust-all
+
+      - name: Clone cosmic-term
+        run: |
+          git clone https://github.com/pop-os/cosmic-term.git
+          cd cosmic-term
+          git submodule update --init --recursive
+
+      - name: Build .deb
+        working-directory: cosmic-term
+        run: dpkg-buildpackage -us -uc
+
+      - name: Upload .deb package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosmic-term-master-arm64-deb
+          path: |
+            cosmic-term_*.deb
