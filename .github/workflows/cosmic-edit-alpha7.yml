@@ -28,7 +28,7 @@ jobs:
       - name: Upload .deb package
         uses: actions/upload-artifact@v4
         with:
-          name: cosmic-edit-deb-amd64
+          name: cosmic-edit-alpha7-amd64-deb
           path: |
             cosmic-edit_*.deb
 
@@ -56,6 +56,6 @@ jobs:
       - name: Upload .deb package
         uses: actions/upload-artifact@v4
         with:
-          name: cosmic-edit-deb-arm64
+          name: cosmic-edit-alpha7-arm64-deb
           path: |
             cosmic-edit_*.deb
