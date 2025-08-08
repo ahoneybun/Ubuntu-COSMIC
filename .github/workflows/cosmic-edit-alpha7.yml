@@ -4,8 +4,36 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-amd64:
     runs-on: ubuntu-24.04
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git build-essential devscripts fakeroot
+          sudo apt-get install -y debhelper just libglib2.0-dev libxkbcommon-dev rust-all
+
+      - name: Clone cosmic-edit
+        run: |
+          git clone https://github.com/pop-os/cosmic-edit.git
+          cd cosmic-edit
+          git checkout epoch-1.0.0-alpha.7
+          git submodule update --init --recursive
+
+      - name: Build .deb
+        working-directory: cosmic-edit
+        run: dpkg-buildpackage -us -uc
+
+      - name: Upload .deb package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosmic-edit-deb
+          path: |
+            cosmic-edit_*.deb
+
+  build-arm64:
+    runs-on: ubuntu-24.04-arm
 
     steps:
       - name: Install dependencies
