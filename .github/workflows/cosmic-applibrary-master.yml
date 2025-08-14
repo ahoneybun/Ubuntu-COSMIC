@@ -29,7 +29,7 @@ jobs:
         with:
           name: cosmic-applibrary-master-amd64-deb
           path: |
-            cosmic-applibrary_*.deb
+            cosmic-app-library_*.deb
 
   build-arm64:
     runs-on: ubuntu-24.04-arm
@@ -56,4 +56,4 @@ jobs:
         with:
           name: cosmic-applibrary-master-arm64-deb
           path: |
-            cosmic-applibrary_*.deb
+            cosmic-app-library_*.deb
