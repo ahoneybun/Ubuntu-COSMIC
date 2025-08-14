@@ -40,7 +40,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y git build-essential devscripts fakeroot
-          sudo apt-get install -y debhelper just libglib2.0-dev libxkbcommon-dev rust-all
+          sudo apt-get install -y libdbus-1-dev libegl-dev libpulse-dev libudev-dev libxkbcommon-dev libwayland-dev libinput-dev
 
       - name: Clone cosmic-applets
         run: |

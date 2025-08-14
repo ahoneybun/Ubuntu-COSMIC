@@ -9,14 +9,14 @@ GitHub Actions for building COSMIC packages for Ubuntu
 
 - [x] cosmic-edit
 - [x] cosmic-term
-- [ ] cosmic-files
+- [x] cosmic-files
 - [ ] cosmic-store
 - [ ] cosmic-player
 
 ## COSMIC backend
 
-- [ ] cosmic-applets
-- [ ] cosmic-applibrary
+- [x] cosmic-applets
+- [x] cosmic-applibrary
 - [ ] cosmic-bg
 - [ ] cosmic-comp
 - [ ] cosmic-greeter
