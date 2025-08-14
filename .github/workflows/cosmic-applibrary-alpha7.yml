@@ -1,4 +1,4 @@
-name: Build cosmic-applets - master
+name: Build cosmic-applibrary - 1.0.0 alpha7
 
 on:
   workflow_dispatch:
@@ -12,24 +12,25 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y git build-essential devscripts debhelper debhelper-compat just fakeroot rust-all
-          sudo apt-get install -y libdbus-1-dev libegl-dev libpulse-dev libudev-dev libxkbcommon-dev libwayland-dev libinput-dev
+          sudo apt-get install -y libxkbcommon-dev libwayland-dev
 
-      - name: Clone cosmic-applets
+      - name: Clone cosmic-applibrary
         run: |
-          git clone https://github.com/pop-os/cosmic-applets.git
-          cd cosmic-applets
+          git clone https://github.com/pop-os/cosmic-applibrary.git
+          cd cosmic-applibrary
+          git checkout epoch-1.0.0-alpha.7
           git submodule update --init --recursive
 
       - name: Build .deb
-        working-directory: cosmic-applets
+        working-directory: cosmic-applibrary
         run: dpkg-buildpackage -us -uc
 
       - name: Upload .deb package
         uses: actions/upload-artifact@v4
         with:
-          name: cosmic-applets-master-amd64-deb
+          name: cosmic-applibrary-alpha7-amd64-deb
           path: |
-            cosmic-applets_*.deb
+            cosmic-applibrary_*.deb
 
   build-arm64:
     runs-on: ubuntu-24.04-arm
@@ -39,21 +40,22 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y git build-essential devscripts debhelper debhelper-compat just fakeroot rust-all
-          sudo apt-get install -y libdbus-1-dev libegl-dev libpulse-dev libudev-dev libxkbcommon-dev libwayland-dev libinput-dev
+          sudo apt-get install -y libxkbcommon-dev libwayland-dev
 
-      - name: Clone cosmic-applets
+      - name: Clone cosmic-applibrary
         run: |
-          git clone https://github.com/pop-os/cosmic-applets.git
-          cd cosmic-applets
+          git clone https://github.com/pop-os/cosmic-applibrary.git
+          cd cosmic-applibrary
+          git checkout epoch-1.0.0-alpha.7
           git submodule update --init --recursive
 
       - name: Build .deb
-        working-directory: cosmic-applets
+        working-directory: cosmic-applibrary
         run: dpkg-buildpackage -us -uc
 
       - name: Upload .deb package
         uses: actions/upload-artifact@v4
         with:
-          name: cosmic-applets-master-arm64-deb
+          name: cosmic-applibrary-alpha7-arm64-deb
           path: |
-            cosmic-applets_*.deb
+            cosmic-applibrary_*.deb
