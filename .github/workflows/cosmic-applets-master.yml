@@ -1,0 +1,59 @@
+name: Build cosmic-applets - 1.0.0 master
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-amd64:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git build-essential devscripts debhelper debhelper-compat just fakeroot rust-all
+          sudo apt-get install -y libdbus-1-dev libegl-dev libpulse-dev libudev-dev libxkbcommon-dev libwayland-dev libinput-dev
+
+      - name: Clone cosmic-applets
+        run: |
+          git clone https://github.com/pop-os/cosmic-applets.git
+          cd cosmic-applets
+          git submodule update --init --recursive
+
+      - name: Build .deb
+        working-directory: cosmic-applets
+        run: dpkg-buildpackage -us -uc
+
+      - name: Upload .deb package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosmic-applets-master-amd64-deb
+          path: |
+            cosmic-applets_*.deb
+
+  build-arm64:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git build-essential devscripts debhelper debhelper-compat just fakeroot rust-all
+          sudo apt-get install -y libdbus-1-dev libegl-dev libpulse-dev libudev-dev libxkbcommon-dev libwayland-dev libinput-dev
+
+      - name: Clone cosmic-applets
+        run: |
+          git clone https://github.com/pop-os/cosmic-applets.git
+          cd cosmic-applets
+          git submodule update --init --recursive
+
+      - name: Build .deb
+        working-directory: cosmic-applets
+        run: dpkg-buildpackage -us -uc
+
+      - name: Upload .deb package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosmic-applets-master-arm64-deb
+          path: |
+            cosmic-applets_*.deb
